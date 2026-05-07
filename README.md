@@ -14,7 +14,19 @@ Run on three datasets with multiple cross-family judges (full numbers in `result
 | WildChat-1M (open chat, GPT-generated) | 100 | Anthropic × Gemini | 0.26 |
 | UltraChat-200k (GPT-generated) | 92–100 | Anthropic × Gemini × **Llama-3.3-70B-FP8** (self-hosted on Lambda H100 via vLLM) | Anthropic↔Llama **0.40** (κ=0.47 on answer_copying); Gemini↔both 0.17–0.18 |
 
-**Reading.** On hand-crafted contrastive cases, all judges converge strongly (~r = 0.95). On real chat data, agreement drops sharply. Adding an open-weights judge (Llama-70B) reveals that Anthropic and Llama (different families, different training) converge moderately while Gemini diverges from both — i.e. the Anthropic-vs-Gemini disagreement is better explained by **judge calibration drift** (Gemini systematically conservative — 98% rated thinking-with-AI) than by genuine rubric ambiguity. Hand-coded ground truth (30 UltraChat conversations, in `validation/`) is the next step to pin down which judge tracks human labels best.
+### 3-judge agreement on UltraChat (the key methodological result)
+
+![3-judge agreement](results/cross_judge_ultrachat/agreement_bars.png)
+
+Anthropic Haiku and Llama-3.3-70B-FP8 (different families, different training pipelines) converge moderately (r=0.40, κ=0.47 on answer_copying). Gemini 2.0 Flash diverges from both (r=0.17–0.18). The Anthropic-vs-Gemini disagreement is therefore better explained by **judge calibration drift** than by genuine rubric ambiguity.
+
+### What that calibration drift looks like
+
+![per-judge distributions on UltraChat](results/cross_judge_ultrachat/per_judge_distributions.png)
+
+Same 100 UltraChat conversations, scored by three different judges. **Gemini Flash's "almost everything is 0" pattern** (mean 0.03, median 0.00) is the visible source of the cross-judge disagreement. Anthropic Haiku and Llama-3.3-70B-FP8 — from disjoint families, with no shared training pipeline — produce broadly similar middle-of-scale distributions.
+
+Hand-coded ground truth (30 UltraChat conversations, in `validation/`) is the next step to pin down which judge tracks human labels best.
 
 ## What it does
 
