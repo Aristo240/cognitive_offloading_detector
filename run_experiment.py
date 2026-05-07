@@ -18,11 +18,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from grader import GraderConfig, aggregate_score, grade_conversation
+from grader import PROVIDER_CONFIG, GraderConfig, aggregate_score, grade_conversation
 
 
 def load_synthetic(path: Path) -> list[dict]:
@@ -60,32 +61,70 @@ def load_jsonl(path: Path) -> list[dict]:
     return out
 
 
-def load_hf_dataset(name: str, split: str, n: int, min_turns: int = 4) -> list[dict]:
+def load_hf_dataset(
+    name: str,
+    split: str,
+    n: int,
+    min_turns: int = 4,
+    include_model_regex: str | None = None,
+    exclude_model_regex: str | None = None,
+) -> list[dict]:
     """Load conversations from a HuggingFace dataset.
 
-    Tolerant to several common schemas (conversation, messages, turns).
-    Filters short conversations.
+    Tolerant to several common schemas (conversation, messages, turns). Filters
+    short conversations.
+
+    If include_model_regex is given, only keeps conversations whose 'model'
+    field matches. If exclude_model_regex is given, drops conversations whose
+    'model' field matches. Both can be used; both are case-insensitive when the
+    regex includes (?i).
+
+    The 'model' field is the source-LLM identifier in datasets like
+    LMSYS-Chat-1M and is used here to control judge-vs-judged family overlap.
     """
     from datasets import load_dataset
+    inc_re = re.compile(include_model_regex) if include_model_regex else None
+    exc_re = re.compile(exclude_model_regex) if exclude_model_regex else None
+
     ds = load_dataset(name, split=split, streaming=True)
     out = []
-    seen_ids = set()
+    seen_ids: set[str] = set()
+    n_scanned = 0
+    n_filtered_inc, n_filtered_exc, n_filtered_short = 0, 0, 0
     for i, ex in enumerate(ds):
         if len(out) >= n:
             break
+        n_scanned += 1
+        source_model = str(ex.get("model") or ex.get("source_model") or "")
+        if inc_re and not inc_re.search(source_model):
+            n_filtered_inc += 1
+            continue
+        if exc_re and exc_re.search(source_model):
+            n_filtered_exc += 1
+            continue
         turns = _extract_turns(ex)
         if turns is None or len(turns) < min_turns:
+            n_filtered_short += 1
             continue
         cid = str(ex.get("conversation_id") or ex.get("id") or i)
         if cid in seen_ids:
             cid = f"{cid}_{i}"
         seen_ids.add(cid)
-        out.append({"id": cid, "turns": turns})
+        row = {"id": cid, "turns": turns}
+        if source_model:
+            row["source_model"] = source_model
+        out.append(row)
+
     if not out:
         raise RuntimeError(
-            f"Loaded 0 usable conversations from {name!r}. "
-            "The dataset schema may not match. Inspect a few examples and adapt _extract_turns."
+            f"Loaded 0 usable conversations from {name!r} after scanning {n_scanned} "
+            f"(filtered: include={n_filtered_inc}, exclude={n_filtered_exc}, short={n_filtered_short}). "
+            "Check filters or _extract_turns."
         )
+    print(
+        f"Scanned {n_scanned}, kept {len(out)}. "
+        f"Filtered: include={n_filtered_inc}, exclude={n_filtered_exc}, short={n_filtered_short}."
+    )
     return out
 
 
@@ -146,16 +185,39 @@ def main() -> None:
     ap.add_argument("--out", default="results/grades.jsonl")
     ap.add_argument("--cache", default=None,
                     help="Path to write loaded conversations cache. Default: derived from --out.")
-    ap.add_argument("--provider", default="anthropic", choices=["anthropic", "openai"])
-    ap.add_argument("--model", default="claude-haiku-4-5")
+    ap.add_argument("--provider", default="anthropic",
+                    choices=sorted(PROVIDER_CONFIG.keys()),
+                    help="Judge backend.")
+    ap.add_argument("--model", default="",
+                    help="Model identifier. Empty = provider default.")
     ap.add_argument("--sleep", type=float, default=0.3, help="Seconds between API calls.")
     ap.add_argument("--no-resume", action="store_true",
                     help="Overwrite output file. Default is to append/resume.")
+    ap.add_argument("--include-model-regex", default=None,
+                    help="HF only: keep only conversations whose source 'model' field matches this regex.")
+    ap.add_argument("--exclude-model-regex", default=None,
+                    help="HF only: drop conversations whose source 'model' field matches this regex. "
+                         "Useful for confound control: exclude conversations from the judge's family.")
+    ap.add_argument("--auto-exclude-judge-family", action="store_true",
+                    help="HF only: auto-set --exclude-model-regex from PROVIDER_CONFIG[provider]['family_regex']. "
+                         "Confound-mitigation default for judge vs. judged.")
     args = ap.parse_args()
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path = Path(args.cache) if args.cache else out_path.parent / f"{out_path.stem}_conversations.jsonl"
+
+    cfg = GraderConfig(provider=args.provider, model=args.model)
+
+    # Resolve confound-control filter
+    exclude_re = args.exclude_model_regex
+    if args.auto_exclude_judge_family:
+        family_re = cfg.family_regex()
+        if exclude_re:
+            exclude_re = f"({exclude_re})|({family_re})"
+        else:
+            exclude_re = family_re
+        print(f"Auto-excluding judge-family conversations matching: {family_re}")
 
     # Load conversations
     if args.source == "synthetic":
@@ -163,7 +225,13 @@ def main() -> None:
     elif args.source == "jsonl":
         convos = load_jsonl(Path(args.data))
     else:
-        convos = load_hf_dataset(args.data, args.hf_split, args.n)
+        convos = load_hf_dataset(
+            args.data,
+            args.hf_split,
+            args.n,
+            include_model_regex=args.include_model_regex,
+            exclude_model_regex=exclude_re,
+        )
     convos = convos[: args.n]
     print(f"Loaded {len(convos)} conversations from source={args.source} ({args.data})")
 
@@ -203,6 +271,8 @@ def main() -> None:
                     "provider": result["provider"],
                     "timestamp_utc": datetime.now(timezone.utc).isoformat(),
                 }
+                if c.get("source_model"):
+                    row["source_model"] = c["source_model"]
                 if c.get("label_hint"):
                     row["label_hint"] = c["label_hint"]
                 f.write(json.dumps(row) + "\n")
