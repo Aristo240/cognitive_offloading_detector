@@ -149,23 +149,30 @@ def compute_pairwise_agreement(judge_files: dict[str, Path]) -> dict:
     judge_dfs: dict[str, pd.DataFrame] = {}
     for slug, path in judge_files.items():
         rows = []
-        for line in path.read_text().splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                r = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            if "scores" not in r:
-                continue
-            row = {"id": str(r["id"]), "aggregate": r.get("aggregate")}
-            for m in MARKERS:
-                row[m] = _to_int(r["scores"].get(m, {}).get("score"))
-            rows.append(row)
-        judge_dfs[slug] = pd.DataFrame(rows)
+        if path.exists():
+            for line in path.read_text().splitlines():
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    r = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if "scores" not in r:
+                    continue
+                row = {"id": str(r["id"]), "aggregate": r.get("aggregate")}
+                for m in MARKERS:
+                    row[m] = _to_int(r["scores"].get(m, {}).get("score"))
+                rows.append(row)
+        if rows:
+            judge_dfs[slug] = pd.DataFrame(rows)
+        else:
+            print(f"  (skipping {slug}: 0 successfully-graded rows)")
 
     judges = list(judge_dfs.keys())
+    if len(judges) < 2:
+        return {"judges": judges, "n_per_judge": {j: len(judge_dfs[j]) for j in judges},
+                "pairs": {}, "note": "fewer than 2 judges with usable rows; no pairs to compare"}
     summary = {
         "judges": judges,
         "n_per_judge": {j: len(judge_dfs[j]) for j in judges},

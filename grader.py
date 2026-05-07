@@ -47,14 +47,17 @@ PROVIDER_CONFIG: dict[str, dict] = {
     },
     "gemini": {
         "backend": "openai_compat",
-        "default_model": "gemini-2.5-flash",
+        # Note: gemini-2.5-* default to thinking mode which consumes the
+        # max_tokens budget before producing user-visible output, often
+        # leaving the JSON truncated. gemini-2.0-flash has no thinking.
+        "default_model": "gemini-2.0-flash",
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "api_key_env": "GEMINI_API_KEY",
     },
     "lambda": {
         "backend": "openai_compat",
         "default_model": "qwen3-32b-fp8",
-        "base_url": "https://api.lambdalabs.com/v1",
+        "base_url": "https://api.lambda.ai/v1",
         "api_key_env": "LAMBDA_API_KEY",
     },
 }
