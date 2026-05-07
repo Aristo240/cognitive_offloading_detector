@@ -60,6 +60,18 @@ PROVIDER_CONFIG: dict[str, dict] = {
         "base_url": "https://api.lambda.ai/v1",
         "api_key_env": "LAMBDA_API_KEY",
     },
+    # vLLM server we self-host on a Lambda Cloud GPU instance. Default points
+    # at localhost:8000 (i.e., when this code runs on the same instance as
+    # vLLM). Override --base-url to point at a remote IP if running cross_judge
+    # from a different machine.
+    "vllm": {
+        "backend": "openai_compat",
+        "default_model": "meta-llama/Llama-3.3-70B-Instruct",
+        "base_url": "http://localhost:8000/v1",
+        # vLLM does not check the API key value, but the openai SDK requires
+        # one to be present. Any non-empty string works.
+        "api_key_env": "VLLM_API_KEY",
+    },
 }
 
 # Maps a substring found in a judge's model name to a regex that matches
