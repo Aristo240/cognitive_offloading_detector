@@ -25,10 +25,18 @@ python3 -m pip install --quiet vllm hf-transfer huggingface_hub
 
 echo "=== [2/5] Downloading $MODEL_ID (FP8 ~70 GB; expect 5-15 min) ==="
 mkdir -p "$LOCAL_MODEL_DIR"
-HF_HUB_ENABLE_HF_TRANSFER=1 huggingface-cli download "$MODEL_ID" \
-    --local-dir "$LOCAL_MODEL_DIR" \
-    --local-dir-use-symlinks False \
-    --quiet
+# Use python API directly; the cli (huggingface-cli / hf) names have churned
+# across versions. snapshot_download is stable.
+HF_HUB_ENABLE_HF_TRANSFER=1 python3 -c "
+from huggingface_hub import snapshot_download
+import os
+snapshot_download(
+    repo_id='$MODEL_ID',
+    local_dir='$LOCAL_MODEL_DIR',
+    token=os.environ.get('HF_TOKEN'),
+)
+print('download done')
+"
 
 echo "=== [3/5] Starting vLLM in background ==="
 mkdir -p logs
