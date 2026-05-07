@@ -4,6 +4,18 @@
 
 A small LLM-as-judge that scores user turns in human-LLM conversations on five candidate behavioral markers related to cognitive offloading: **answer-copying, no-elaboration, no-error-correction, no-questioning, verbatim-reuse**. Intended as a starting point for behavioral analysis of dialogue, not a settled measurement instrument.
 
+## Headline findings (v0.1)
+
+Run on three datasets with multiple cross-family judges (full numbers in `results/`):
+
+| Dataset | n | Judges | Aggregate Pearson r between judges |
+|---|---:|---|---|
+| Hand-crafted contrastive synthetic | 8 | Anthropic Haiku × OpenAI gpt-4o-mini × Gemini 2.0 Flash | **0.93–0.96** (all pairs) |
+| WildChat-1M (open chat, GPT-generated) | 100 | Anthropic × Gemini | 0.26 |
+| UltraChat-200k (GPT-generated) | 92–100 | Anthropic × Gemini × **Llama-3.3-70B-FP8** (self-hosted on Lambda H100 via vLLM) | Anthropic↔Llama **0.40** (κ=0.47 on answer_copying); Gemini↔both 0.17–0.18 |
+
+**Reading.** On hand-crafted contrastive cases, all judges converge strongly (~r = 0.95). On real chat data, agreement drops sharply. Adding an open-weights judge (Llama-70B) reveals that Anthropic and Llama (different families, different training) converge moderately while Gemini diverges from both — i.e. the Anthropic-vs-Gemini disagreement is better explained by **judge calibration drift** (Gemini systematically conservative — 98% rated thinking-with-AI) than by genuine rubric ambiguity. Hand-coded ground truth (30 UltraChat conversations, in `validation/`) is the next step to pin down which judge tracks human labels best.
+
 ## What it does
 
 1. **Rubric** (`rubric.md`) — five candidate markers with scoring anchors.
