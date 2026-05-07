@@ -29,19 +29,37 @@ For some runs:
   (output of `analyze.py`).
 - `grades.csv` — flat per-conversation table.
 
-## Open-weights judge: attempted, deferred
+## Open-weights 3rd judge: landed (UltraChat)
 
 A 3rd judge from a 4th family — **Llama-3.3-70B-Instruct-FP8** self-hosted on
-a Lambda Cloud H100 PCIe via vLLM — was attempted on the UltraChat pool but
-not landed. The Lambda Cloud orchestrator (`lambda_run.py`) and the remote
-serving script (`serve_and_judge.sh`) both work; the model downloads cleanly
-from HuggingFace. The blocker was a stack of dependency incompatibilities
-between Lambda Stack's NVIDIA driver, pip-installed `torch`, `transformers`,
-`numpy`, and `vllm`. Each pinned-version fix unlocked a new ABI mismatch
-(driver 12.8 vs torch CUDA 13.0; numpy 2.x vs system scipy; transformers
-TokenizersBackend vs vllm 0.8.5; `torch_c_dlpack_ext` ABI vs torch 2.6).
+a Lambda Cloud H100 PCIe (80 GB) via vLLM in the official `vllm/vllm-openai`
+Docker image — graded **92/100** UltraChat conversations (8 failed: long-conversation
+token-budget edge cases at `--max-model-len 4096`, handled gracefully by the
+grader's resumability-friendly write path).
 
-This is deferred to v0.2 with a more controlled environment (e.g. a Docker
-image with all deps frozen, or Lambda's prebuilt vLLM image when available).
-The two-judge UltraChat agreement numbers stand on their own as a
-calibration-mismatch finding without a 3rd judge to confirm.
+Per-judge files for this run:
+- `cross_judge_ultrachat/anthropic__claude-haiku-4-5.jsonl` (n=100)
+- `cross_judge_ultrachat/gemini__gemini-2.0-flash.jsonl` (n=100)
+- `cross_judge_ultrachat/vllm__Llama-3.3-70B-Instruct-FP8.jsonl` (n=92)
+- `cross_judge_ultrachat/llama/` — distribution plot + grades.csv for Llama only
+
+### 3-judge cross-family agreement (UltraChat n=92–100)
+
+| Pair | n | Aggregate Pearson r | Best per-marker κ |
+|---|---:|---:|---|
+| Anthropic Haiku ↔ **Llama-3.3-70B-FP8** | 92 | **0.40** | answer_copying κ=0.47 |
+| Anthropic Haiku ↔ Gemini Flash | 100 | 0.17 | answer_copying κ=0.04 |
+| Gemini Flash ↔ Llama-3.3-70B-FP8 | 92 | 0.18 | no_questioning κ=0.12 |
+
+**Reading.** Anthropic and Llama-70B (different families, different training
+pipelines) converge moderately; Gemini diverges from both. The Anthropic-vs-Gemini
+disagreement on UltraChat is therefore better explained by **judge calibration drift
+(Gemini being systematically conservative — 98% of conversations rated
+thinking-with-AI)** than by genuine rubric ambiguity. Hand-coded ground truth
+(see `validation/`) will pin down which judges are closest to human labels.
+
+Path to land it (recorded for reproducibility): the official `vllm/vllm-openai`
+Docker image (skipping the entire pip dep stack), `--max-model-len 4096` to leave
+headroom for KV cache after the 70 GB FP8 weights, prequantized
+`RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic` weights. Setup script:
+`serve_and_judge_docker.sh`.
