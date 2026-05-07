@@ -9,6 +9,10 @@
 # and lambda_run.py rsyncs them back.
 set -euo pipefail
 
+# pip --user installs scripts to ~/.local/bin which isn't on non-interactive
+# ssh PATH by default. Add it here so huggingface-cli, vllm, etc. resolve.
+export PATH="$HOME/.local/bin:$PATH"
+
 cd ~/cognitive_offloading_detector
 
 MODEL_ID="neuralmagic/Llama-3.3-70B-Instruct-FP8-dynamic"
