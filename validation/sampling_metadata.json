@@ -1,0 +1,197 @@
+{
+  "seed": 7,
+  "n_per_bin": 10,
+  "stratified_by": "anthropic__claude-haiku-4-5 aggregate score",
+  "n_pool": 100,
+  "n_anthro_graded": 100,
+  "bins": {
+    "low": [
+      "48",
+      "77",
+      "8",
+      "11",
+      "23",
+      "72",
+      "52",
+      "17",
+      "81",
+      "12"
+    ],
+    "mid": [
+      "59",
+      "32",
+      "38",
+      "18",
+      "15",
+      "28",
+      "65",
+      "56",
+      "46",
+      "5"
+    ],
+    "high": [
+      "96",
+      "67",
+      "78",
+      "4",
+      "90",
+      "91",
+      "51",
+      "85",
+      "49",
+      "75"
+    ]
+  },
+  "sample_with_anthro_aggregate": [
+    {
+      "id": "96",
+      "anthro_aggregate": 1.75,
+      "bin": "high"
+    },
+    {
+      "id": "67",
+      "anthro_aggregate": 1.75,
+      "bin": "high"
+    },
+    {
+      "id": "78",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "4",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "90",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "91",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "51",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "85",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "49",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "75",
+      "anthro_aggregate": 2.0,
+      "bin": "high"
+    },
+    {
+      "id": "48",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "77",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "8",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "11",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "23",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "72",
+      "anthro_aggregate": 0.0,
+      "bin": "low"
+    },
+    {
+      "id": "52",
+      "anthro_aggregate": 0.5,
+      "bin": "low"
+    },
+    {
+      "id": "17",
+      "anthro_aggregate": 0.5,
+      "bin": "low"
+    },
+    {
+      "id": "81",
+      "anthro_aggregate": 0.6666666666666666,
+      "bin": "low"
+    },
+    {
+      "id": "12",
+      "anthro_aggregate": 1.0,
+      "bin": "low"
+    },
+    {
+      "id": "59",
+      "anthro_aggregate": 1.0,
+      "bin": "mid"
+    },
+    {
+      "id": "32",
+      "anthro_aggregate": 1.0,
+      "bin": "mid"
+    },
+    {
+      "id": "38",
+      "anthro_aggregate": 1.0,
+      "bin": "mid"
+    },
+    {
+      "id": "18",
+      "anthro_aggregate": 1.25,
+      "bin": "mid"
+    },
+    {
+      "id": "15",
+      "anthro_aggregate": 1.3333333333333333,
+      "bin": "mid"
+    },
+    {
+      "id": "28",
+      "anthro_aggregate": 1.5,
+      "bin": "mid"
+    },
+    {
+      "id": "65",
+      "anthro_aggregate": 1.6666666666666667,
+      "bin": "mid"
+    },
+    {
+      "id": "56",
+      "anthro_aggregate": 1.6666666666666667,
+      "bin": "mid"
+    },
+    {
+      "id": "46",
+      "anthro_aggregate": 1.75,
+      "bin": "mid"
+    },
+    {
+      "id": "5",
+      "anthro_aggregate": 1.75,
+      "bin": "mid"
+    }
+  ]
+}

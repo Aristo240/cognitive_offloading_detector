@@ -1,11 +1,11 @@
 {
-  "timestamp_utc": "2026-05-07T08:52:13.643175+00:00",
-  "source": "hf",
-  "data": "HuggingFaceH4/ultrachat_200k",
-  "hf_split": "train_sft",
+  "timestamp_utc": "2026-05-07T11:51:28.468339+00:00",
+  "source": "jsonl",
+  "data": "results/cross_judge_ultrachat/conversation_pool.jsonl",
+  "hf_split": "train",
   "n_requested": 100,
   "n_pool": 100,
-  "exclude_model_regex": "((?i)claude|anthropic)|((?i)gemini|bard|palm|gemma|google)",
+  "exclude_model_regex": null,
   "include_model_regex": null,
   "judges": [
     {
@@ -19,6 +19,12 @@
       "provider": "gemini",
       "model": "gemini-2.0-flash",
       "family_regex": "(?i)gemini|bard|palm|gemma|google"
+    },
+    {
+      "slug": "vllm__Llama-3.3-70B-Instruct-FP8",
+      "provider": "vllm",
+      "model": "Llama-3.3-70B-Instruct-FP8",
+      "family_regex": "(?i)llama|vicuna|alpaca|koala|guanaco|wizardlm|tulu"
     }
   ]
 }

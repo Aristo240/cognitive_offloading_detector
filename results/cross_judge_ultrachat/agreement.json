@@ -1,16 +1,18 @@
 {
   "judges": [
     "anthropic__claude-haiku-4-5",
-    "gemini__gemini-2.0-flash"
+    "gemini__gemini-2.0-flash",
+    "vllm__Llama-3.3-70B-Instruct-FP8"
   ],
   "n_per_judge": {
     "anthropic__claude-haiku-4-5": 100,
-    "gemini__gemini-2.0-flash": 100
+    "gemini__gemini-2.0-flash": 100,
+    "vllm__Llama-3.3-70B-Instruct-FP8": 92
   },
   "pairs": {
     "anthropic__claude-haiku-4-5 vs gemini__gemini-2.0-flash": {
       "n_overlap": 100,
-      "aggregate_pearson_r": 0.16572154507633197,
+      "aggregate_pearson_r": 0.16572154507633205,
       "per_marker": {
         "answer_copying": {
           "n": 100,
@@ -32,6 +34,71 @@
           "n": 100,
           "kappa_quadratic": 0.02164862614487939,
           "exact_agreement": 0.21
+        },
+        "verbatim_reuse": {
+          "n": 0,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    },
+    "anthropic__claude-haiku-4-5 vs vllm__Llama-3.3-70B-Instruct-FP8": {
+      "n_overlap": 92,
+      "aggregate_pearson_r": 0.39682598528795243,
+      "per_marker": {
+        "answer_copying": {
+          "n": 92,
+          "kappa_quadratic": 0.47154046997389043,
+          "exact_agreement": 0.5652173913043478
+        },
+        "no_elaboration": {
+          "n": 92,
+          "kappa_quadratic": 0.2451417878220815,
+          "exact_agreement": 0.3804347826086957
+        },
+        "no_error_correction": {
+          "n": 7,
+          "kappa_quadratic": 0.05405405405405406,
+          "exact_agreement": 0.42857142857142855
+        },
+        "no_questioning": {
+          "n": 92,
+          "kappa_quadratic": 0.08154795288839023,
+          "exact_agreement": 0.2717391304347826
+        },
+        "verbatim_reuse": {
+          "n": 3,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    },
+    "gemini__gemini-2.0-flash vs vllm__Llama-3.3-70B-Instruct-FP8": {
+      "n_overlap": 92,
+      "aggregate_pearson_r": 0.17825415195533792,
+      "per_marker": {
+        "answer_copying": {
+          "n": 92,
+          "kappa_quadratic": 0.08379120879120872,
+          "exact_agreement": 0.6847826086956522
+        },
+        "no_elaboration": {
+          "n": 92,
+          "kappa_quadratic": 0.01683937823834203,
+          "exact_agreement": 0.6739130434782609
+        },
+        "no_error_correction": {
+          "n": 0,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        },
+        "no_questioning": {
+          "n": 92,
+          "kappa_quadratic": 0.1211556383970177,
+          "exact_agreement": 0.782608695652174
         },
         "verbatim_reuse": {
           "n": 0,
