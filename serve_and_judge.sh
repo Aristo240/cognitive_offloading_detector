@@ -15,7 +15,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 cd ~/cognitive_offloading_detector
 
-MODEL_ID="neuralmagic/Llama-3.3-70B-Instruct-FP8-dynamic"
+MODEL_ID="RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic"
 LOCAL_MODEL_DIR=~/models/llama-3.3-70b-fp8
 PORT=8000
 
