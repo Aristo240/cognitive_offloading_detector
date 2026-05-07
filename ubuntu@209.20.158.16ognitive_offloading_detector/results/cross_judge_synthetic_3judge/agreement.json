@@ -1,0 +1,113 @@
+{
+  "judges": [
+    "anthropic__claude-haiku-4-5",
+    "gemini__gemini-2.0-flash",
+    "openai__gpt-4o-mini"
+  ],
+  "n_per_judge": {
+    "anthropic__claude-haiku-4-5": 8,
+    "gemini__gemini-2.0-flash": 8,
+    "openai__gpt-4o-mini": 8
+  },
+  "pairs": {
+    "anthropic__claude-haiku-4-5 vs gemini__gemini-2.0-flash": {
+      "n_overlap": 8,
+      "aggregate_pearson_r": 0.9614572569291024,
+      "per_marker": {
+        "answer_copying": {
+          "n": 8,
+          "kappa_quadratic": 0.9310344827586207,
+          "exact_agreement": 0.875
+        },
+        "no_elaboration": {
+          "n": 8,
+          "kappa_quadratic": 0.9310344827586207,
+          "exact_agreement": 0.875
+        },
+        "no_error_correction": {
+          "n": 2,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        },
+        "no_questioning": {
+          "n": 8,
+          "kappa_quadratic": 0.75,
+          "exact_agreement": 0.875
+        },
+        "verbatim_reuse": {
+          "n": 1,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    },
+    "anthropic__claude-haiku-4-5 vs openai__gpt-4o-mini": {
+      "n_overlap": 8,
+      "aggregate_pearson_r": 0.9362952835669162,
+      "per_marker": {
+        "answer_copying": {
+          "n": 8,
+          "kappa_quadratic": 0.8367346938775511,
+          "exact_agreement": 0.75
+        },
+        "no_elaboration": {
+          "n": 8,
+          "kappa_quadratic": 1.0,
+          "exact_agreement": 1.0
+        },
+        "no_error_correction": {
+          "n": 2,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        },
+        "no_questioning": {
+          "n": 8,
+          "kappa_quadratic": 0.9333333333333333,
+          "exact_agreement": 0.875
+        },
+        "verbatim_reuse": {
+          "n": 3,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    },
+    "gemini__gemini-2.0-flash vs openai__gpt-4o-mini": {
+      "n_overlap": 8,
+      "aggregate_pearson_r": 0.9358393618598849,
+      "per_marker": {
+        "answer_copying": {
+          "n": 8,
+          "kappa_quadratic": 0.7777777777777778,
+          "exact_agreement": 0.625
+        },
+        "no_elaboration": {
+          "n": 8,
+          "kappa_quadratic": 0.9310344827586207,
+          "exact_agreement": 0.875
+        },
+        "no_error_correction": {
+          "n": 2,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        },
+        "no_questioning": {
+          "n": 8,
+          "kappa_quadratic": 0.6774193548387097,
+          "exact_agreement": 0.75
+        },
+        "verbatim_reuse": {
+          "n": 1,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    }
+  }
+}

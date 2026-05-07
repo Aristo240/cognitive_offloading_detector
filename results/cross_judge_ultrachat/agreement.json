@@ -1,0 +1,45 @@
+{
+  "judges": [
+    "anthropic__claude-haiku-4-5",
+    "gemini__gemini-2.0-flash"
+  ],
+  "n_per_judge": {
+    "anthropic__claude-haiku-4-5": 100,
+    "gemini__gemini-2.0-flash": 100
+  },
+  "pairs": {
+    "anthropic__claude-haiku-4-5 vs gemini__gemini-2.0-flash": {
+      "n_overlap": 100,
+      "aggregate_pearson_r": 0.16572154507633197,
+      "per_marker": {
+        "answer_copying": {
+          "n": 100,
+          "kappa_quadratic": 0.03536977491961413,
+          "exact_agreement": 0.34
+        },
+        "no_elaboration": {
+          "n": 100,
+          "kappa_quadratic": 0.0069356872635560896,
+          "exact_agreement": 0.22
+        },
+        "no_error_correction": {
+          "n": 0,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        },
+        "no_questioning": {
+          "n": 100,
+          "kappa_quadratic": 0.02164862614487939,
+          "exact_agreement": 0.21
+        },
+        "verbatim_reuse": {
+          "n": 0,
+          "kappa_quadratic": null,
+          "exact_agreement": null,
+          "note": "fewer than 5 non-NA pairs"
+        }
+      }
+    }
+  }
+}

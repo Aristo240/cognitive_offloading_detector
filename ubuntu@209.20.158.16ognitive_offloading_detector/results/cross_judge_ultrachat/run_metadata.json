@@ -1,0 +1,24 @@
+{
+  "timestamp_utc": "2026-05-07T08:52:13.643175+00:00",
+  "source": "hf",
+  "data": "HuggingFaceH4/ultrachat_200k",
+  "hf_split": "train_sft",
+  "n_requested": 100,
+  "n_pool": 100,
+  "exclude_model_regex": "((?i)claude|anthropic)|((?i)gemini|bard|palm|gemma|google)",
+  "include_model_regex": null,
+  "judges": [
+    {
+      "slug": "anthropic__claude-haiku-4-5",
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5",
+      "family_regex": "(?i)claude|anthropic"
+    },
+    {
+      "slug": "gemini__gemini-2.0-flash",
+      "provider": "gemini",
+      "model": "gemini-2.0-flash",
+      "family_regex": "(?i)gemini|bard|palm|gemma|google"
+    }
+  ]
+}

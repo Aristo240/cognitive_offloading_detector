@@ -1,0 +1,9 @@
+id,aggregate,n_turns,answer_copying,no_elaboration,no_error_correction,no_questioning,verbatim_reuse
+syn_01_essay_dump,2.0,5,2,2,,2,2.0
+syn_02_engaged_learner,0.0,5,0,0,,0,0.0
+syn_03_verbatim_reuse,2.0,5,2,2,,2,2.0
+syn_04_no_error_correction,1.25,5,0,1,2.0,2,
+syn_05_productive_debugging,0.0,5,0,0,,0,0.0
+syn_06_logistical_only,2.0,5,2,2,,2,
+syn_07_mixed,0.3333333333333333,5,1,0,,0,
+syn_08_concept_pushback,0.0,5,0,0,0.0,0,
