@@ -216,7 +216,9 @@ def rsync_to(local_dir: Path, ip: str, remote_dir: str, ssh_key_path: str,
              excludes: list[str]) -> None:
     ssh_arg = (f"ssh -i {ssh_key_path} -o StrictHostKeyChecking=no "
                f"-o UserKnownHostsFile=/dev/null")
-    cmd = ["rsync", "-az", "--info=stats1", "-e", ssh_arg]
+    # Note: '--info=stats1' would be nicer but macOS ships rsync 2.6.9 which
+    # rejects --info. Stick to plain -az for portability.
+    cmd = ["rsync", "-az", "-e", ssh_arg]
     for e in excludes:
         cmd += ["--exclude", e]
     cmd += [str(local_dir) + "/", f"ubuntu@{ip}:{remote_dir}/"]
@@ -227,7 +229,7 @@ def rsync_to(local_dir: Path, ip: str, remote_dir: str, ssh_key_path: str,
 def rsync_from(ip: str, remote_dir: str, local_dir: Path, ssh_key_path: str) -> None:
     ssh_arg = (f"ssh -i {ssh_key_path} -o StrictHostKeyChecking=no "
                f"-o UserKnownHostsFile=/dev/null")
-    cmd = ["rsync", "-az", "--info=stats1", "-e", ssh_arg,
+    cmd = ["rsync", "-az", "-e", ssh_arg,
            f"ubuntu@{ip}:{remote_dir}/", str(local_dir) + "/"]
     print(f"  $ rsync <- ubuntu@{ip}:{remote_dir}/")
     subprocess.run(cmd, check=True)
