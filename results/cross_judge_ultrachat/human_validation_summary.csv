@@ -1,0 +1,16 @@
+judge,marker,n_pairs_with_both_scored,kappa_quadratic,exact_agreement,note
+Anthropic Haiku,answer_copying,30,0.5238,0.6000,
+Anthropic Haiku,no_elaboration,30,0.3019,0.4667,
+Anthropic Haiku,no_error_correction,0,n/a,n/a,fewer than 5 non-NA pairs; skipping
+Anthropic Haiku,no_questioning,30,0.1176,0.4667,
+Anthropic Haiku,verbatim_reuse,2,n/a,n/a,fewer than 5 non-NA pairs; skipping
+Gemini 2.0 Flash,answer_copying,30,n/a,0.3000,degenerate (all same value in one rater); kappa undefined
+Gemini 2.0 Flash,no_elaboration,30,n/a,0.6000,degenerate (all same value in one rater); kappa undefined
+Gemini 2.0 Flash,no_error_correction,0,n/a,n/a,fewer than 5 non-NA pairs; skipping
+Gemini 2.0 Flash,no_questioning,30,0.0170,0.3333,
+Gemini 2.0 Flash,verbatim_reuse,0,n/a,n/a,fewer than 5 non-NA pairs; skipping
+Llama-3.3-70B-FP8,answer_copying,29,0.3777,0.6552,
+Llama-3.3-70B-FP8,no_elaboration,29,0.3211,0.6207,
+Llama-3.3-70B-FP8,no_error_correction,0,n/a,n/a,fewer than 5 non-NA pairs; skipping
+Llama-3.3-70B-FP8,no_questioning,29,0.0848,0.3448,
+Llama-3.3-70B-FP8,verbatim_reuse,1,n/a,n/a,fewer than 5 non-NA pairs; skipping

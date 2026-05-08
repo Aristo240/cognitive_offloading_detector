@@ -7,5 +7,7 @@ __pycache__/
 *.pyc
 # Top-level results/ files: only gitignore the loose ones, keep CSVs in subdirs
 results/grades_*.jsonl
-validation/human_labels.csv
+# validation/human_labels.csv was previously gitignored as a privacy precaution;
+# now committed because it contains only the hand-coded scores (no PII), and
+# the validation reproducibility depends on it.
 .DS_Store

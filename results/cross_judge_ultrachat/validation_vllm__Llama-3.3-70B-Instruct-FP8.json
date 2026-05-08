@@ -1,0 +1,35 @@
+{
+  "n_matched": 29,
+  "markers": {
+    "answer_copying": {
+      "n": 29,
+      "kappa_quadratic": 0.3776824034334765,
+      "exact_agreement": 0.6551724137931034,
+      "note": null
+    },
+    "no_elaboration": {
+      "n": 29,
+      "kappa_quadratic": 0.3210702341137124,
+      "exact_agreement": 0.6206896551724138,
+      "note": null
+    },
+    "no_error_correction": {
+      "n": 0,
+      "kappa_quadratic": null,
+      "exact_agreement": null,
+      "note": "fewer than 5 non-NA pairs; skipping"
+    },
+    "no_questioning": {
+      "n": 29,
+      "kappa_quadratic": 0.08484221417485782,
+      "exact_agreement": 0.3448275862068966,
+      "note": null
+    },
+    "verbatim_reuse": {
+      "n": 1,
+      "kappa_quadratic": null,
+      "exact_agreement": null,
+      "note": "fewer than 5 non-NA pairs; skipping"
+    }
+  }
+}

@@ -26,7 +26,26 @@ Anthropic Haiku and Llama-3.3-70B-FP8 (different families, different training pi
 
 Same 100 UltraChat conversations, scored by three different judges. **Gemini Flash's "almost everything is 0" pattern** (mean 0.03, median 0.00) is the visible source of the cross-judge disagreement. Anthropic Haiku and Llama-3.3-70B-FP8 — from disjoint families, with no shared training pipeline — produce broadly similar middle-of-scale distributions.
 
-Hand-coded ground truth (30 UltraChat conversations, in `validation/`) is the next step to pin down which judge tracks human labels best.
+### Hand-coded human validation (n=30)
+
+A single annotator (project author) hand-coded all 30 UltraChat conversations from `validation/conversations_to_code.md` blind to the LLM-judge scores. Per-marker quadratic-weighted Cohen's κ vs each judge:
+
+![human validation κ](results/cross_judge_ultrachat/human_validation_kappa.png)
+
+| Marker | Anthropic Haiku | Gemini 2.0 Flash | Llama-3.3-70B-FP8 |
+|---|---:|---:|---:|
+| answer_copying | **0.524** *(moderate)* | *degenerate*¹ | 0.378 |
+| no_elaboration | 0.302 | *degenerate*¹ | **0.321** |
+| no_questioning | 0.118 | 0.017 | 0.085 |
+| no_error_correction | n.d.² | n.d.² | n.d.² |
+| verbatim_reuse | n.d.² | n.d.² | n.d.² |
+
+¹ Gemini gave the same value to all 30 conversations on AC and NE, so kappa is undefined (no variance to correlate with). This is the same all-zero pattern visible in the per-judge histogram above — Gemini systematically refuses to assign positive offloading scores in this dataset.
+² Both NEC and VR have n_pairs < 5 because the human (and most LLM judges) marked NA on most rows: AI errors are rare in UltraChat task-completion conversations, and explicit verbatim-reuse statements are also rare.
+
+**Reading.** **Anthropic Haiku is closest to human ground truth on the discriminating markers** (κ = 0.52 on answer_copying, moderate; κ = 0.30 on no_elaboration). Llama-70B is a respectable second (κ = 0.38, 0.32). Gemini's degenerate scoring pattern means it can't track human variation at all on AC and NE. `no_questioning` is poorly tracked across all judges — likely a rubric calibration issue worth iterating on.
+
+Detailed table: [`results/cross_judge_ultrachat/human_validation_summary.csv`](results/cross_judge_ultrachat/human_validation_summary.csv). Raw labels: [`validation/human_labels.csv`](validation/human_labels.csv).
 
 ## What it does
 
