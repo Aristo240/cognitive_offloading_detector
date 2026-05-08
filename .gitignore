@@ -5,9 +5,7 @@
 .venv/
 __pycache__/
 *.pyc
-results/*.jsonl
-results/*.csv
-results/*.png
-results/*.json
+# Top-level results/ files: only gitignore the loose ones, keep CSVs in subdirs
+results/grades_*.jsonl
 validation/human_labels.csv
 .DS_Store
